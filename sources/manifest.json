@@ -1,0 +1,30 @@
+{
+
+  "applications": {
+    "gecko": {
+      "id": "exodify@facetts.com"
+    }
+  },
+  "manifest_version": 2,
+  "name": "Exodify",
+  "version": "0.1",
+
+  "description": "Adds numbers of trackers on google play apps using Exodus Privacy.",
+
+  "icons": {
+    "48": "icons/exodify-48.png"
+  },
+
+  "permissions" : [
+    "https://reports.exodus-privacy.eu.org/api/search/*"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": ["*://play.google.com/store/apps/details?id=*"],
+      "js": ["exodify.js"],
+      "css" : ["exodify.css"]
+    }
+  ]
+
+}

@@ -1,0 +1,25 @@
+.exodify-trackerInfoBox {
+	padding: 5px;
+	background-color: #f8d7da;;
+	color: #721c24;;
+	height: 50px;
+	line-height: 50px;
+	font-size: 32px;
+}
+.exodify-trackerInfoBox i{
+	font-size: 14px;
+}
+
+.exodify-trackerInfoBoxClean {
+	padding: 5px;
+	background-color: #d4edda;
+	color: #721c24;
+}
+
+.exodify-trackerInfoBox a {
+	color: #721c24;
+}
+
+.exodify-trackerInfoBoxClean a {
+	color: #721c24;
+}
