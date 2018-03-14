@@ -24,4 +24,4 @@ This extension just includes:
 
 ## How to install dev version
 
-Download the self-signed plugin [here](/dist/exodify-0.1.1-an+fx.xpi), then type about:addons in the firefox URL bar and click on the wheel icon and 'Install Add-On From File...' and select the file downloaded.
+Download the self-signed plugin [here](/dist/exodify-0.1.2-an+fx.xpi), then type about:addons in the firefox URL bar and click on the wheel icon and 'Install Add-On From File...' and select the file downloaded.
