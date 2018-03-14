@@ -2,7 +2,7 @@
 
 **Exodify is a Firefox add-on that will show you how many trackers there is in the android application you are looking at in the playstore.**
 
-![Screenshot](/doc/img-trackers-1.jpg)
+![Screenshot](/doc/img-trackers-full.jpg)
 
 ## What it does
 
