@@ -14,3 +14,8 @@ This extension just includes:
 ## What it shows
 
 * For now only the number of trackers
+
+
+## How to install dev version
+
+Download the self-signed plugin [here](/dist/exodify-0.1.1-an+fx.xpi), then type about:addons in the firefox URL bar and click on the wheel icon and 'Install Add-On From File...' and select the file downloaded.
