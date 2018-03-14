@@ -1,13 +1,22 @@
 .exodify-trackerInfoBox {
 	padding: 5px;
-	background-color: #f8d7da;;
-	color: #721c24;;
+	padding-left: 10px;
+	background-color: #f8d7da;
+	color: #721c24;
+}
+
+.exodify-trackerInfoBoxMid {
+	padding: 5px;
+	padding-left: 10px;
+	background-color: #fff3cd;
+	color: #721c24;
+}
+
+.exodify-trackerInfoBox span.exodify-count,.exodify-trackerInfoBoxMid span.exodify-count {
 	height: 50px;
 	line-height: 50px;
 	font-size: 32px;
-}
-.exodify-trackerInfoBox i{
-	font-size: 14px;
+	font-weight: bold;
 }
 
 .exodify-trackerInfoBoxClean {
@@ -15,11 +24,19 @@
 	background-color: #d4edda;
 	color: #721c24;
 }
-
-.exodify-trackerInfoBox a {
-	color: #721c24;
+.exodify-trackerInfoBoxClean.missing {
+	background-color: #fff3cd;
 }
 
-.exodify-trackerInfoBoxClean a {
+
+.exodify-trackerInfoBoxClean span.exodify-count {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.exodify-trackerInfoBox a,.exodify-trackerInfoBoxMid a, .exodify-trackerInfoBoxClean a {
 	color: #721c24;
+	font-size: 14px;
+	font-style: italic;
+	text-decoration-line: underline;
 }
