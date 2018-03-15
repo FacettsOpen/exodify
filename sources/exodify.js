@@ -63,7 +63,7 @@
         return
       }
       var appID = getParameterByName('id')
-      console.log("App id is : " + appID)
+      // console.log("App id is : " + appID)
       if(appID) {
         var xmlHttp = new XMLHttpRequest();
             xmlHttp.open( "GET", 'https://reports.exodus-privacy.eu.org/api/search/'+appID, false ); // false for synchronous request
