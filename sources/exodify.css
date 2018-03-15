@@ -1,15 +1,26 @@
+
 .exodify-trackerInfoBox {
 	padding: 5px;
-	padding-left: 10px;
+	padding-left: 40px;
 	background-color: #f8d7da;
 	color: #721c24;
+	background-image: url("icons/exodify-48.png");
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	background-position: 5px center;
 }
 
 .exodify-trackerInfoBoxMid {
 	padding: 5px;
-	padding-left: 10px;
+	padding-left: 40px;
 	background-color: #fff3cd;
 	color: #721c24;
+
+	background-image: url("icons/exodify-48.png");
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	background-position: 5px center;
+
 }
 
 .exodify-trackerInfoBox span.exodify-count,.exodify-trackerInfoBoxMid span.exodify-count {
@@ -23,6 +34,12 @@
 	padding: 5px;
 	background-color: #d4edda;
 	color: #721c24;
+
+	padding-left: 40px;
+	background-image: url("icons/exodify-48.png");
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	background-position: 5px center;
 }
 .exodify-trackerInfoBoxClean.missing {
 	background-color: #fff3cd;

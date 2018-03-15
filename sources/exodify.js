@@ -36,7 +36,7 @@
     const poweredBySpan = document.createElement('a');
     poweredBySpan.className = 'exodify-powered'
     poweredBySpan.textContent = 'Would you like to let ExodusPrivacy analyze it?'
-    poweredBySpan.href = 'https://reports.exodus-privacy.eu.org/analysis/submit';
+    poweredBySpan.href = 'https://reports.exodus-privacy.eu.org/analysis/submit#'+appID;
     counterDiv.appendChild(poweredBySpan)
 
     return counterDiv
@@ -58,6 +58,10 @@
 
     // document.body.style.border = "5px solid red";
     function exodify() {
+      if (window.location.href.indexOf('play.google.com/store/apps/details?') == -1) {
+        //ignore
+        return
+      }
       var appID = getParameterByName('id')
       console.log("App id is : " + appID)
       if(appID) {
