@@ -14,7 +14,7 @@ function getHashParams() {
 }
 
 const appID = getHashParams()
-const inputEl = document.getElementById('query')
+const inputEl = document.getElementById('handle')
 if (inputEl && appID && appID[0]) {
 	inputEl.value = appID[0]
 }
