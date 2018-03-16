@@ -1,0 +1,12 @@
+
+html, body {
+  width: 400px;
+}
+
+.setting ul, .settings li {
+	list-style: none;
+}
+
+.hidden {
+  display: none;
+}
