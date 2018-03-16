@@ -2,12 +2,11 @@
 
 **Exodify is a Firefox and Chrome add-on that will show you how many trackers there are in the android application you are looking at in the playstore.**
 
-- Firefox: https://addons.mozilla.org/en-US/firefox/addon/exodify/
-- Chrome: https://chrome.google.com/webstore/detail/exodify/imfbjeceaelpdlhbeembaocakecajhlm
+Install on [Firefox](https://addons.mozilla.org/en-US/firefox/addon/exodify/) or [Chrome](https://chrome.google.com/webstore/detail/exodify/imfbjeceaelpdlhbeembaocakecajhlm)
 
 ![Screenshot](/doc/img-trackers-full.jpg)
 
-![Screenshot](/doc/img-trackers-unknown.jpg)
+![Screenshot](/doc/img-banks.jpg)
 
 ![Screenshot](/doc/img-no-trackers.jpg)
 
