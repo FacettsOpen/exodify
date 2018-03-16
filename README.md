@@ -10,7 +10,6 @@ Install on [Firefox](https://addons.mozilla.org/en-US/firefox/addon/exodify/) or
 
 ![Screenshot](/doc/img-no-trackers.jpg)
 
-img-trackers-unknown.jpg
 
 ## What it does
 
