@@ -123,25 +123,35 @@ function findAlternativeEl() {
 
 /*
 * Fetches from exodus privacy and returns -1 if unknown, or >0 number of trackers.
-* throw if network/parse error
 */
-function fetchNbTrackersFor(appID, el,callback) {
+function fetchNbTrackersFor(appID, el,callback,err) {
   var xmlHttp = new XMLHttpRequest();
-  // TODO async
-  xmlHttp.open( "GET", 'https://reports.exodus-privacy.eu.org/api/search/'+appID, false ); // false for synchronous request
+  
+  function reqListener () {
+    // console.log(this.responseText);
+    try {
+      var json = JSON.parse(xmlHttp.responseText);
+      if (json[appID] && json[appID]['reports']) {
+        const nbReports = json[appID]['reports'].length;
+        const lastReport = json[appID]['reports'][nbReports - 1];
+        const nbTrackers = lastReport.trackers.length
+        callback(appID,el,nbTrackers)
+      } else {
+        callback(appID,el,-1)
+      }
+    } catch(e) {
+
+    }
+    if (err) {
+      err()
+    }
+  }
+
+  xmlHttp.addEventListener("load", reqListener);
+  xmlHttp.open( "GET", 'https://reports.exodus-privacy.eu.org/api/search/'+appID );
   xmlHttp.send( null );
   //console.log('Response for '+ appID +'is ' + xmlHttp.responseText)
-  var json = JSON.parse(xmlHttp.responseText);
-  if (json[appID] && json[appID]['reports']) {
-    const nbReports = json[appID]['reports'].length;
-    const lastReport = json[appID]['reports'][nbReports - 1];
-    const nbTrackers = lastReport.trackers.length
-    callback(appID,el,nbTrackers)
-    return
-  } else {
-    callback(appID,el,-1)
-  }
-  throw "oups"
+  
 }
 
 function appXodify() {
@@ -158,29 +168,25 @@ function appXodify() {
     if(existing) {
      continue;
     }
-    try {
-      fetchNbTrackersFor(alternatives[i].id,alternatives[i].el, function(id,el,nb) {
-        //console.log(id + ':' + nb);
-        
-        var counterDiv = createQuickInfoElement(nb,id)
-        if (nb == -1) {
-          counterDiv.className = 'exodify-quickbox mid';
-        }
-        else if (nb == 0) {
-          counterDiv.className = 'exodify-quickbox clean';
-        } else if (nb < 3) {
-          counterDiv.className = 'exodify-quickbox mid';
-        } else {
-          counterDiv.className = 'exodify-quickbox'
-        }
-        var rEL = el.querySelectorAll('.cover-image-container')[0]
-        //rEL.parentNode.insertAfter(counterDiv, rEL); 
-        rEL.appendChild(counterDiv)
-       
-      })
-    } catch(et) {
-      //console.log(et)
-    }
+    fetchNbTrackersFor(alternatives[i].id,alternatives[i].el, function(id,el,nb) {
+      //console.log(id + ':' + nb);
+      
+      var counterDiv = createQuickInfoElement(nb,id)
+      if (nb == -1) {
+        counterDiv.className = 'exodify-quickbox mid';
+      }
+      else if (nb == 0) {
+        counterDiv.className = 'exodify-quickbox clean';
+      } else if (nb < 3) {
+        counterDiv.className = 'exodify-quickbox mid';
+      } else {
+        counterDiv.className = 'exodify-quickbox'
+      }
+      var rEL = el.querySelectorAll('.cover-image-container')[0]
+      //rEL.parentNode.insertAfter(counterDiv, rEL); 
+      rEL.appendChild(counterDiv)
+     
+    })
   }
 }
 
@@ -239,32 +245,30 @@ if(appID) {
 
     var alternatives = findAlternativeEl()
     for (var i = 0; i < alternatives.length; i++) {
-      try {
-        fetchNbTrackersFor(alternatives[i].id,alternatives[i].el, function(id,el,nb) {
-          //console.log(id + ':' + nb);
-          const existing = document.getElementById('exodify-'+id)
-          if(existing) {
-            existing.parentElement.removeChild(existing);
-          }
-          var counterDiv = createQuickInfoElement(nb,id)
-          if (nb == -1) {
-            counterDiv.className = 'exodify-quickbox mid';
-          }
-          else if (nb == 0) {
-            counterDiv.className = 'exodify-quickbox clean';
-          } else if (nb < 3) {
-            counterDiv.className = 'exodify-quickbox mid';
-          } else {
-            counterDiv.className = 'exodify-quickbox'
-          }
-          var rEL = el.querySelectorAll('.cover-image-container')[0]
-          //rEL.parentNode.insertAfter(counterDiv, rEL); 
-          rEL.appendChild(counterDiv)
-         
-        })
-      } catch(et) {
-        //console.log(et)
-      }
+      
+      fetchNbTrackersFor(alternatives[i].id,alternatives[i].el, function(id,el,nb) {
+        //console.log(id + ':' + nb);
+        const existing = document.getElementById('exodify-'+id)
+        if(existing) {
+          existing.parentElement.removeChild(existing);
+        }
+        var counterDiv = createQuickInfoElement(nb,id)
+        if (nb == -1) {
+          counterDiv.className = 'exodify-quickbox mid';
+        }
+        else if (nb == 0) {
+          counterDiv.className = 'exodify-quickbox clean';
+        } else if (nb < 3) {
+          counterDiv.className = 'exodify-quickbox mid';
+        } else {
+          counterDiv.className = 'exodify-quickbox'
+        }
+        var rEL = el.querySelectorAll('.cover-image-container')[0]
+        //rEL.parentNode.insertAfter(counterDiv, rEL); 
+        rEL.appendChild(counterDiv)
+       
+      })
+      
     }
   } catch(e) {
          //Oups
@@ -288,12 +292,19 @@ setInterval(function(){
 //=================================
 
 function onError(error) {
-  console.log(`Error: ${error}`);
+  //console.log(`Error: ${error}`);
 }
 
 function onGot(item) {
   if (item.extendedExodify) {
-   window._exodify.shouldAppExodify  = item.extendedExodify.newValue || false
+    //TODO why?
+    if(typeof(item.extendedExodify) === "boolean"){
+      // variable is a boolean
+      window._exodify.shouldAppExodify = item.extendedExodify
+    } else {
+      window._exodify.shouldAppExodify  = item.extendedExodify.newValue || false
+    }
+
   }
   //TODO clear existing?
 }
