@@ -1,10 +1,17 @@
 
 html, body {
-  width: 400px;
+font-family: Helvetica, Arial, Sans-Serif;
+  width: 300px;
+  font-size: 12px;
 }
 
-.setting ul, .settings li {
-	list-style: none;
+h3 {
+	font-size: 15px;
+	font-weight: bold;
+}
+
+p.info {
+	color: #9B9B9B;
 }
 
 .hidden {
