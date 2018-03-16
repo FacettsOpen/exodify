@@ -83,43 +83,59 @@ function createMissingElement(appID) {
 }
 
 function injectHtmlInAppContainer(elem) {
-  var elems = document.getElementsByTagName('div'), i;
-   for (i in elems) {
-    if((' ' + elems[i].className + ' ').indexOf('cover-container')
-      > -1) {
-            // console.log("FOUND THAT ITEM");
-          elems[i].parentNode.insertBefore(elem, elems[i]); 
-            }
+  //Depending on the context, the code is minified/obfuscated, so try different euristics
+  var targetElem = document.querySelectorAll('div.cover-container')[0] || document.querySelectorAll('div.oQ6oV')[0] || document.querySelectorAll("c-wiz[jsdata='deferred-i8']")[0]
+  // if (elems.length == 0) {
+  //   elems = document.querySelectorAll('div.oQ6oV')
+  // }
+  // for (i in elems) {
+  //   elems[i].parentNode.insertBefore(elem, elems[i]); 
+  //   break;
+  // }
+  if (targetElem) {
+    targetElem.parentNode.insertBefore(elem, targetElem); 
   }
+  
+  // var elems = document.getElementsByTagName('div'), i;
+  //  for (i in elems) {
+  //   if((' ' + elems[i].className + ' ').indexOf('cover-container')
+  //     > -1) {
+  //           // console.log("FOUND THAT ITEM");
+  //         elems[i].parentNode.insertBefore(elem, elems[i]); 
+  //           }
+  // }
 }
 
-function injectHtmlInAltAppContainer(elem) {
-  var elems = document.getElementsByTagName('div'), i;
-   for (i in elems) {
-    if((' ' + elems[i].className + ' ').indexOf('cover-container')
-      > -1) {
-            // console.log("FOUND THAT ITEM");
-          elems[i].parentNode.insertBefore(elem, elems[i]); 
-            }
-  }
-}
 
 function findAlternativeEl() {
   if (!document.querySelectorAll) {
     return []
   }
   var els = document.querySelectorAll('div.card-content[data-docid]');
-  if (!els) {
-    return []
+  if (els.length > 0 ) {
+    var results = []
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i]
+      var appID = el.getAttribute('data-docid')
+      results.push({id: appID, el: el})
+    }
+    return results
   }
-  var results = []
-  for (var i = 0; i < els.length; i++) {
-    var el = els[i]
-    var appID = el.getAttribute('data-docid')
-    results.push({id: appID, el: el})
+
+  //Might be the new version obfuscted
+  els = document.querySelectorAll("a.AnjTGd[href^='/store/apps/details?id=']");
+  if (els.length > 0) {
+    var results = []
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i]
+      var appID = el.getAttribute('href').substring('/store/apps/details?id='.length)
+      results.push({id: appID, el: el.parentNode})  
+    }
+    return results
   }
-  return results
+  return []
 }
+ 
 
 /*
 * Fetches from exodus privacy and returns -1 if unknown, or >0 number of trackers.
@@ -182,7 +198,7 @@ function appXodify() {
       } else {
         counterDiv.className = 'exodify-quickbox'
       }
-      var rEL = el.querySelectorAll('.cover-image-container')[0]
+      var rEL = el.querySelectorAll('.cover')[0]
       //rEL.parentNode.insertAfter(counterDiv, rEL); 
       rEL.appendChild(counterDiv)
      
@@ -263,9 +279,14 @@ if(appID) {
         } else {
           counterDiv.className = 'exodify-quickbox'
         }
-        var rEL = el.querySelectorAll('.cover-image-container')[0]
-        //rEL.parentNode.insertAfter(counterDiv, rEL); 
+        var rEL = el.querySelectorAll('.cover')[0] || el
         rEL.appendChild(counterDiv)
+        // if(el.querySelectorAll('.cover-image-container')[0]) {
+        //   var rEL = el.querySelectorAll('.cover-image-container')[0]
+        //   rEL.parentNode.insertAfter(counterDiv, rEL); 
+        // } else {
+        //   el.appendChild(counterDiv)
+        // }
        
       })
       
