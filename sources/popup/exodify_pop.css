@@ -3,8 +3,39 @@ html, body {
 font-family: Helvetica, Arial, Sans-Serif;
   width: 300px;
   font-size: 12px;
+  margin: 0;
+background-color: #24CBA0;
 }
 
+
+a , a:visited, a:hover, a:active{
+	color: #3C8096;
+	outline:0;
+}
+#popup-content {
+	padding: 5px;
+	background-color: white;
+}
+
+.exoVersion {
+	position: absolute;
+	right: 8px;
+	font-weight: normal;
+	font-size: 9px;
+	color: #ADEADC;
+}
+
+/*#currentInfo {
+	border-bottom: 1px solid #E9E9E9;
+}*/
+
+#currentInfo hr {
+	background-color:  #E9E9E9;
+	height: 1px;
+	box-shadow: none;
+	color: #E9E9E9;
+	border: none;
+}
 h3 {
 	font-size: 15px;
 	font-weight: bold;
@@ -12,8 +43,57 @@ h3 {
 
 p.info {
 	color: #9B9B9B;
+	font-size: 10px;
+}
+
+
+.top-banner {
+	height: 25px;
+	background-color: #24CBA0;
+	color: white;
+
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAABMlBMVEUAAAAnzKEnzKEr1aomy6D8/f98XoR5W4F+YIeAYYl7XYN2VX4+q5j///90aIZxbIh3V4D6/f2a5tRg2bmEZ4t4WID3/Pzo+fbA7+TBtMVr2760pblS1bNO1bGrmLCch6ItwZ0vv5yWfpyOdJVMmZL0/Pv7+vvv+/ns6O7S8+zk3uW07N+v692j6NfOxNHGucm4qbxZ17c70KmfjKcxzqUrzKIswZ2Sepk8rphOl5RXjpFWjpB4ZIf49vjj9/Py8PPb9vDn4unJ8ei57uHf2ODb1N3Z0t3TytaO5M6H4suA4ch74MZ03sNv3cCxobY3z6gvwJ2XgJ09rZdqdotzUnvf9vHb6urM8unF8Obc1N6T5NCS5NCf1czEvsy8rcFk2btJ069C0aykkap3pKZdhI1chI0B+tOTAAAABHRSTlMA5ogGBMV9/gAAAdJJREFUSMfl1ddS4zAUBuBNyDlqtpM4cXpIgySkNwh96bCUpSzbG/X9XwGZ4guIiTxc8s9YvvE3GllHOh/ebSb8vsDY+PwTDvAHlOJ3gE8N+BwQUMybwebg2BuARMYceAJgHsZTngAcNSFx6QVMZ35AbG9WHcDqxSrAWlcdwEZmWo6NY2UAzSN7TEWUARyYAL/24XtWFcS6ic1IGCBsDtQAxLPZCthZm1UDlaxcuJ1vXxa0/HgQ/p9opOS7/I9RRo3FwjjwyZTPH9gpcRIKEWRB7XXQOLRn6ffRYrnJySISujz/GpiJxOT3f6NIrtZ30rvlrRKhwYI7iHfjEl0zJKflGgqxq7cFsiVXEIvMQGU/byCKjp4USErtIkE05tzAQR3qvYBGEa2+3jonxBIEEanmApp7X+0ammKISNLVdDF3inbY1Giwkfp9v7e31Aa5Wi3ZSt4DejMS1Hs9OT7OYHXgJxchQoj7DE40ijz6Uf8sEEmxxF3X4GTOeAJkuFKN8pd/6XmWGFpJfYuL87a+TrnchzGgEKQc09XtTmtlezhqp19kfpnyUFTW0pC71NLznAUZPlXrmdJlfLJo0IfzcKJ6e+e1BZcTp9xQPLcs703xveYONeRBzrgb7OIAAAAASUVORK5CYII=);
+	background-repeat: no-repeat;
+	background-position: 2px center;
+	background-size: 25px;
+}
+
+.top-banner h1 {
+	font-weight: bold;
+	font-size: 15px;
+	padding-left: 28px;
+	line-height: 25px;
 }
 
 .hidden {
   display: none;
+}
+
+.appName {
+	font-weight: bold;
+}
+
+.appVersion {
+	font-weight: normal;
+	font-size: 8px;
+	color: #9B9B9B;
+	padding-left: 8px
+}
+
+ul {
+	list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 1em; 
+}
+
+ul li {
+	list-style: none;
+	font-size: 10px;
+	background-color: #F6F6F6;
+	color: #224955;
+	margin: 0px 0px 4px 0px;
+	padding-left: 5px;
+	height: 20px;
+	line-height: 20px;
 }

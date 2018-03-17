@@ -17,7 +17,8 @@
 
   "permissions" : [
     "https://reports.exodus-privacy.eu.org/api/search/*",
-    "storage"
+    "storage",
+    "activeTab"
   ],
 
   "options_ui": {
