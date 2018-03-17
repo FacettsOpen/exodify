@@ -116,8 +116,12 @@ function findAlternativeEl() {
     var results = []
     for (var i = 0; i < els.length; i++) {
       var el = els[i]
-      var appID = el.getAttribute('data-docid')
-      results.push({id: appID, el: el})
+      //Quick work-around to ignore movies/books .. need to refactor to search for anchors
+      let anchors = el.querySelectorAll("a[href^='/store/apps/details?id=']")
+      if (anchors.length > 0) {
+        var appID = el.getAttribute('data-docid')
+        results.push({id: appID, el: el})
+      }
     }
     return results
   }
