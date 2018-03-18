@@ -14,8 +14,8 @@ function getParameterByName(name) {
 
 function createInfoElement(nbTrackers, appID) {
   var counterDiv = document.createElement('div');
-  counterDiv.id = 'exodify'
-  // counterDiv.className = 'exodify'
+  //counterDiv.id = 'exodify'
+  counterDiv.setAttribute('data-xodify',appID)
 
   const countSpan = document.createElement('span');
   countSpan.className = 'exodify-count';
@@ -64,7 +64,8 @@ function createQuickInfoElement(nbTrackers, appID) {
 
 function createMissingElement(appID) {
   var counterDiv = document.createElement('div');
-  counterDiv.id = 'exodify'
+  //counterDiv.id = 'exodify' 
+  counterDiv.setAttribute('data-xodify',appID)
   // counterDiv.className = 'exodify'
 
   const countSpan = document.createElement('span');
@@ -82,9 +83,35 @@ function createMissingElement(appID) {
   return counterDiv
 }
 
+function mainAppBoxElem(appID) {
+  var eurist = document.querySelectorAll('div.cover-container')[0]
+  if (eurist) {
+    return eurist
+  } else {
+    //Obfuscted code :/
+    var candidates = document.querySelectorAll('div.oQ6oV')
+    for (var i = 0; i < candidates.length; i++) {
+      if(!candidates[i].offsetParent) {
+        continue;
+      }
+      return candidates[i]
+      // var buttons = candidates[i].querySelectorAll('button')
+      // for (var j = 0; j < buttons.length; j++) {
+      //   var b = buttons[j]
+      //   var att = b.getAttribute('data-item-id')
+      //   if (att && att.indexOf(appID) != -1) {
+      //     return candidates[i]
+      //   }
+      // }
+    }
+  }
+  //?
+  return document.querySelectorAll("c-wiz[jsdata='deferred-i8']")[0]// document.querySelectorAll('div.cover-container')[0] || document.querySelectorAll('div.oQ6oV')[0] || document.querySelectorAll("c-wiz[jsdata='deferred-i8']")[0]
+}
+
 function injectHtmlInAppContainer(elem) {
   //Depending on the context, the code is minified/obfuscated, so try different euristics
-  var targetElem = document.querySelectorAll('div.cover-container')[0] || document.querySelectorAll('div.oQ6oV')[0] || document.querySelectorAll("c-wiz[jsdata='deferred-i8']")[0]
+  var targetElem = mainAppBoxElem()//document.querySelectorAll('div.cover-container')[0] || document.querySelectorAll('div.oQ6oV')[0] || document.querySelectorAll("c-wiz[jsdata='deferred-i8']")[0]
   // if (elems.length == 0) {
   //   elems = document.querySelectorAll('div.oQ6oV')
   // }
@@ -210,18 +237,43 @@ function appXodify() {
   }
 }
 
+
+function getMainExodifyBoxForAppID(id,fromEl) {
+  var query = (fromEl || document).querySelectorAll("[data-xodify='"+ id +"']")
+  if (query[0]) {
+    return query[0]
+  }
+  return null
+}
 //var currentAppID = getParameterByName('id')
 //var currentLocation = window.location
 
 // document.body.style.border = "5px solid red";
 function exodify() {
-if (window.location.href.indexOf('play.google.com/store/apps/details?') == -1) {
-  //ignore
-  return
-}
-var appID = getParameterByName('id')
-// console.log("App id is : " + appID)
-if(appID) {
+  if (window.location.href.indexOf('play.google.com/store/apps/details?') == -1) {
+    //ignore
+    return
+  }
+  var appID = getParameterByName('id')
+  // console.log("App id is : " + appID)
+
+
+
+  if(appID) {
+
+  /*
+  * Check here if the app card is already exodified
+  * Notes: depending on whever the playstore is minified or not the page structure changes
+  * sometimes previous div of the app is hidden (cache? for back)
+  */
+    var mainBox = mainAppBoxElem()
+    if(mainBox && getMainExodifyBoxForAppID(appID,mainBox.parentNode)) {
+      //ignore
+      return
+    }
+
+
+
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open( "GET", 'https://reports.exodus-privacy.eu.org/api/search/'+appID, false ); // false for synchronous request
   xmlHttp.send( null );
@@ -236,7 +288,7 @@ if(appID) {
       const nbTrackers = lastReport.trackers.length
           // console.log("Found " + nbTrackers + " Trackers");
 
-      const existing = document.getElementById('exodify')
+      const existing = getMainExodifyBoxForAppID(appID)//document.getElementById('exodify')
       if(existing) {
         existing.parentElement.removeChild(existing);
       }
@@ -254,7 +306,7 @@ if(appID) {
       injectHtmlInAppContainer(counterDiv)
     } else {
       // no reports
-      const existing = document.getElementById('exodify')
+      const existing = getMainExodifyBoxForAppID(appID)//document.getElementById('exodify')
       if(existing) {
        existing.parentElement.removeChild(existing);
       }
@@ -305,10 +357,12 @@ exodify()
 appXodify()
 setInterval(function(){ 
   appXodify()
+  exodify()
   //check if path has changed
-  if(!document.getElementById('exodify')) {
-    exodify()
-  }}, 3000);
+  // if(!document.getElementById('exodify')) {
+  //   exodify()
+  // }
+}, 3000);
 
 //=================================
 //=================================
