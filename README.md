@@ -2,8 +2,6 @@
 
 Exodify is a Firefox and Chrome add-on that will show you how many trackers there are in the android application you are looking at in the playstore.
 
-## Downloads
-
 **Firefox** &ndash; [Install](https://addons.mozilla.org/en-US/firefox/addon/exodify/) 
 
 **Chrome** &ndash; [Install](https://chrome.google.com/webstore/detail/exodify/imfbjeceaelpdlhbeembaocakecajhlm)
