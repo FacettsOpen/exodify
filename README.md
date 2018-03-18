@@ -1,8 +1,12 @@
 # Exodify [![Mentioned in Awesome Humane Tech](https://awesome.re/mentioned-badge.svg)](https://github.com/engagingspaces/awesome-humane-tech) [![Humane Tech](https://raw.githubusercontent.com/engagingspaces/awesome-humane-tech/master/humane-tech-badge.svg?sanitize=true)](https://humanetech.com)
 
-**Exodify is a Firefox and Chrome add-on that will show you how many trackers there are in the android application you are looking at in the playstore.**
+Exodify is a Firefox and Chrome add-on that will show you how many trackers there are in the android application you are looking at in the playstore.
 
-Install on [Firefox](https://addons.mozilla.org/en-US/firefox/addon/exodify/) or [Chrome](https://chrome.google.com/webstore/detail/exodify/imfbjeceaelpdlhbeembaocakecajhlm)
+## Downloads
+
+**Firefox** &ndash; [Install](https://addons.mozilla.org/en-US/firefox/addon/exodify/) 
+
+**Chrome** &ndash; [Install](https://chrome.google.com/webstore/detail/exodify/imfbjeceaelpdlhbeembaocakecajhlm)
 
 ![Screenshot](/doc/img-trackers-full.jpg)
 
