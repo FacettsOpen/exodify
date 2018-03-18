@@ -7,7 +7,7 @@
   },
   "manifest_version": 2,
   "name": "Exodify",
-  "version": "0.4.2",
+  "version": "0.4.3",
 
   "description": "Adds numbers of trackers on google play apps using Exodus Privacy.",
 

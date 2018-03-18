@@ -58,11 +58,11 @@ function fetchLatestReportFor(appID,callback,err) {
         callback(appID)
       }
     } catch(e) {
-
+		err()
     }
-    if (err) {
-      err()
-    }
+    // if (err) {
+    //   err()
+    // }
   }
   xmlHttp.addEventListener("load", reqListener);
   xmlHttp.open( "GET", 'https://reports.exodus-privacy.eu.org/api/search/'+appID );
@@ -77,6 +77,12 @@ function getActiveWindowTabs() {
   return browser.tabs.query({currentWindow: true, active:true});
 }
 
+function removeLoader() {
+	var els = document.querySelectorAll('.loader')
+	for (var i = 0; i < els.length; i++) {
+		els[i].parentNode.removeChild(els[i]);
+	}
+}
 //console.log('$$$TAB ' + JSON.stringify(browser.tabs.getCurrent()));
 
 getActiveWindowTabs().then(function(tabs) {
@@ -90,14 +96,16 @@ getActiveWindowTabs().then(function(tabs) {
 			var query = tab.url.substring(tab.url.indexOf('?'));
 			//console.log('query is: ' + query)
 			var appId = getParameterByName(query,'id');
+			document.getElementById('currentInfo').innerHTML = '<div class="loader"></div>';
 			fetchLatestReportFor(appId,function(id,name,lastReport) {
-				if (name && lastReport) {
+				if ((name != undefined) && lastReport) {
 					function trackersSuccess(trakers) {
+						removeLoader() 
 						//console.log("######## " + JSON.stringify(trakers))
 						var zDiv = document.getElementById('currentInfo')
 						var infoP = document.createElement('p')
 						var titleSpan = document.createElement('span')
-						titleSpan.textContent = name 
+						titleSpan.textContent = name || appId
 						titleSpan.className = 'appName'
 						infoP.appendChild(titleSpan)
 						var versionSpan = document.createElement('span')
@@ -105,6 +113,23 @@ getActiveWindowTabs().then(function(tabs) {
 						versionSpan.className = 'appVersion'
 						infoP.appendChild(versionSpan)
 						zDiv.appendChild(infoP)
+
+						if (lastReport.trackers.length == 0 ) {
+							var trackerHead = document.createElement('p')
+							trackerHead.className = 'trackerListTop'
+							trackerHead.textContent = 'The Exodus Privacy analysis did not found the code signature of any known trackers in this application.' 
+							zDiv.appendChild(trackerHead)
+						} else if (lastReport.trackers.length == 1) {
+							var trackerHead = document.createElement('p')
+							trackerHead.className = 'trackerListTop'
+							trackerHead.textContent = 'The Exodus Privacy analysis did found code signature of 1 tracker in this application.'
+							zDiv.appendChild(trackerHead)
+						} else {
+							var trackerHead = document.createElement('p')
+							trackerHead.className = 'trackerListTop'
+							trackerHead.textContent = 'The Exodus Privacy analysis did found code signature of ' + lastReport.trackers.length + ' trackers in this application.' //lastReport.trackers.length + ' code signature of trackers found in this app.'
+							zDiv.appendChild(trackerHead)
+						}
 						var ul = document.createElement('ul');
 						ul.className = 'trackerList'
 						for (var i = 0; i < lastReport.trackers.length; i++) {
@@ -127,6 +152,10 @@ getActiveWindowTabs().then(function(tabs) {
 						zDiv.appendChild(document.createElement('hr'));
 					}
 					fetchTrackerList(trackersSuccess, function(err) {console.log(err)})
+				} 
+				else {
+					//Remove loader
+					removeLoader()
 				}
 			})
 		}
