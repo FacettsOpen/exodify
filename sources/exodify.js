@@ -288,6 +288,8 @@ function exodify() {
       const nbTrackers = lastReport.trackers.length
           // console.log("Found " + nbTrackers + " Trackers");
 
+      browser.runtime.sendMessage({appId: appID, nbTrackers: nbTrackers, type : 't1'})
+
       const existing = getMainExodifyBoxForAppID(appID)//document.getElementById('exodify')
       if(existing) {
         existing.parentElement.removeChild(existing);
@@ -306,6 +308,7 @@ function exodify() {
       injectHtmlInAppContainer(counterDiv)
     } else {
       // no reports
+      browser.runtime.sendMessage({appId: appID, nbTrackers: -1, type : 't1'})
       const existing = getMainExodifyBoxForAppID(appID)//document.getElementById('exodify')
       if(existing) {
        existing.parentElement.removeChild(existing);

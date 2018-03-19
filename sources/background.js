@@ -33,45 +33,56 @@ function getParameterByName(query, name) {
   return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
 
+var tabMem = {}
+var currentTabId = ''
 
-//browser.browserAction.setBadgeText({text:'@'})
-browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (tab.url && tab.url.indexOf('://play.google.com/store/apps/details?id=') != -1) {
-    // browser.pageAction.show(tab.id);
-
-	var query = tab.url.substring(tab.url.indexOf('?'));
-	var appId = getParameterByName(query, 'id')
-	fetchNbTrackersFor(appId,function(id,nb){
-		//check that tab url still correct (async)
-		if (tab.url && tab.url.indexOf('://play.google.com/store/apps/details?id=') != -1) {
-			browser.browserAction.setBadgeBackgroundColor({color:'#224955',tabId: tab.id})
-			if (nb == -1) {
-				// browser.browserAction.setBadgeBackgroundColor({color:'#fff3cd',tabId: tab.id})
-				browser.browserAction.setBadgeText({text:'',tabId: tab.id})
-			} else if (nb == 0 ) {
-				// browser.browserAction.setBadgeBackgroundColor({color:'#d4edda',tabId: tab.id})
-				browser.browserAction.setBadgeText({text:'0',tabId: tab.id})
-			} else if (nb < 3) {
-				// browser.browserAction.setBadgeBackgroundColor({color:'#fff3cd',tabId: tab.id})
-				browser.browserAction.setBadgeText({text:''+nb,tabId: tab.id})
-			} else {
-				// browser.browserAction.setBadgeBackgroundColor({color:'#f8d7da',tabId: tab.id})
-				browser.browserAction.setBadgeText({text:''+nb,tabId: tab.id})
-			}
-			// browser.browserAction.setBadgeText({text:''+nb,tabId: tab.id})
-
-		}
-	})
-    
+browser.runtime.onMessage.addListener(function(message,sender) {
+  console.log("MMMMMM BACKGROUND" + JSON.stringify(message))
+  if (message.type == "t1" ) {
+    var appId = message.appId
+    var nb = message.nbTrackers
+    tabMem[currentTabId] =  message.nbTrackers
+    fetchNbTrackersFor(appId,function(id,nb){
+      //check that tab url still correct (async)
+        browser.browserAction.setBadgeBackgroundColor({color:'#224955'/*,tabId: tab.id*/})
+        if (nb == -1) {
+          // browser.browserAction.setBadgeBackgroundColor({color:'#fff3cd',tabId: tab.id})
+          browser.browserAction.setBadgeText({text:''})
+        } else if (nb == 0 ) {
+          // browser.browserAction.setBadgeBackgroundColor({color:'#d4edda',tabId: tab.id})
+          browser.browserAction.setBadgeText({text:'0'})
+        } else if (nb < 3) {
+          // browser.browserAction.setBadgeBackgroundColor({color:'#fff3cd',tabId: tab.id})
+          browser.browserAction.setBadgeText({text:''+nb})
+        } else {
+          // browser.browserAction.setBadgeBackgroundColor({color:'#f8d7da',tabId: tab.id})
+          browser.browserAction.setBadgeText({text:''+nb})
+        }
+        // browser.browserAction.setBadgeText({text:''+nb,tabId: tab.id})
+    })
+      
   } else {
-	browser.browserAction.setBadgeText({text:'',tabId: tab.id})
+   //browser.browserAction.setBadgeText({text:''})
   }
-});
 
-// browser.tabs.query({currentWindow: true}).then(function(tabs) {
-// 	for (var tab of tabs) {
-// 		if (tab.url && tab.url.indexOf('://play.google.com/store/apps/details?id=') != -1) {
-// 			browser.browserAction.setBadgeText({text:'!',tabId: tab.id})
-// 		}
-// 	}
-// })
+  }) 
+
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  //console.log('F.. tab change man! ' + JSON.stringify(changeInfo))
+  var tabMem = {}
+  browser.browserAction.setBadgeText({text:''})
+})
+
+browser.tabs.onActivated.addListener((tabId, changeInfo, tab) => {
+  //console.log('F.. tab activated change man!')
+  currentTabId = tabId.tabId
+  if (tabMem[currentTabId] != undefined) {
+    if (tabMem[currentTabId] == -1) {
+      browser.browserAction.setBadgeText({text:''})
+    } else {
+      browser.browserAction.setBadgeText({text:'' + tabMem[currentTabId]})
+    }
+  } else {
+   browser.browserAction.setBadgeText({text:''})
+  }
+})
