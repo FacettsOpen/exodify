@@ -37,7 +37,7 @@ var tabMem = {}
 var currentTabId = ''
 
 browser.runtime.onMessage.addListener(function(message,sender) {
-  console.log("MMMMMM BACKGROUND" + JSON.stringify(message))
+  //console.log("MMMMMM BACKGROUND" + JSON.stringify(message))
   if (message.type == "t1" ) {
     var appId = message.appId
     var nb = message.nbTrackers
