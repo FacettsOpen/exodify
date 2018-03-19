@@ -17,10 +17,12 @@ Exodify is a browser extension that will show you how many trackers there are in
 
 ## What it does
 
-This extension just includes:
+This extension includes:
 
-* a content script, "exodify.js", that will fetch from exodus REST API the number of trackers in the application and then modify the page to show it.
-
+* A content script, "exodify.js" for the play store, that will fetch from exodus REST API the number of trackers in the application and then modify the page to show it.
+* A content script, "exodify-sub.js" for Exodus Privacy submit page, that auto fills the search bar with the application ID.
+* A browser action, with a popup ("popup/") that shows the trackers name 
+* A background script that is used to update the toolbar icon number badge
 
 ## What it shows
 
