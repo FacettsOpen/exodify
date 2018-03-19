@@ -33,30 +33,31 @@ function getParameterByName(query, name) {
   return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
 
-var tabMem = {}
-var currentTabId = ''
+//var tabMem = {}
+// var currentTabId = ''
 
 browser.runtime.onMessage.addListener(function(message,sender) {
   //console.log("MMMMMM BACKGROUND" + JSON.stringify(message))
+  var tabId = sender.tab.id
   if (message.type == "t1" ) {
     var appId = message.appId
     var nb = message.nbTrackers
-    tabMem[currentTabId] =  message.nbTrackers
+    // tabMem[tabId] =  message.nbTrackers
     fetchNbTrackersFor(appId,function(id,nb){
       //check that tab url still correct (async)
         browser.browserAction.setBadgeBackgroundColor({color:'#224955'/*,tabId: tab.id*/})
         if (nb == -1) {
           // browser.browserAction.setBadgeBackgroundColor({color:'#fff3cd',tabId: tab.id})
-          browser.browserAction.setBadgeText({text:''})
+          browser.browserAction.setBadgeText({text:'',tabId: tabId})
         } else if (nb == 0 ) {
           // browser.browserAction.setBadgeBackgroundColor({color:'#d4edda',tabId: tab.id})
-          browser.browserAction.setBadgeText({text:'0'})
+          browser.browserAction.setBadgeText({text:'0',tabId: tabId})
         } else if (nb < 3) {
           // browser.browserAction.setBadgeBackgroundColor({color:'#fff3cd',tabId: tab.id})
-          browser.browserAction.setBadgeText({text:''+nb})
+          browser.browserAction.setBadgeText({text:''+nb,tabId: tabId})
         } else {
           // browser.browserAction.setBadgeBackgroundColor({color:'#f8d7da',tabId: tab.id})
-          browser.browserAction.setBadgeText({text:''+nb})
+          browser.browserAction.setBadgeText({text:''+nb,tabId: tabId})
         }
         // browser.browserAction.setBadgeText({text:''+nb,tabId: tab.id})
     })
@@ -69,20 +70,21 @@ browser.runtime.onMessage.addListener(function(message,sender) {
 
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   //console.log('F.. tab change man! ' + JSON.stringify(changeInfo))
-  var tabMem = {}
-  browser.browserAction.setBadgeText({text:''})
+  //var tabMem = {}
+  // tabMem[tabId.tabId] = undefined
+  browser.browserAction.setBadgeText({text:'',tabId: tabId.tabId})
 })
 
-browser.tabs.onActivated.addListener((tabId, changeInfo, tab) => {
+//browser.tabs.onActivated.addListener((tabId, changeInfo, tab) => {
   //console.log('F.. tab activated change man!')
-  currentTabId = tabId.tabId
-  if (tabMem[currentTabId] != undefined) {
-    if (tabMem[currentTabId] == -1) {
-      browser.browserAction.setBadgeText({text:''})
-    } else {
-      browser.browserAction.setBadgeText({text:'' + tabMem[currentTabId]})
-    }
-  } else {
-   browser.browserAction.setBadgeText({text:''})
-  }
-})
+  // var currentTabId = tabId.tabId
+  // if (tabMem[currentTabId] != undefined) {
+  //   if (tabMem[currentTabId] == -1) {
+  //     browser.browserAction.setBadgeText({text:''})
+  //   } else {
+  //     browser.browserAction.setBadgeText({text:'' + tabMem[currentTabId]})
+  //   }
+  // } else {
+  //  browser.browserAction.setBadgeText({text:''})
+  // }
+// })
