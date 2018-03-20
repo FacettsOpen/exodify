@@ -141,10 +141,11 @@ getActiveWindowTabs().then(function(tabs) {
 						zDiv.appendChild(ul)
 
 						var moreInfoA = document.createElement('a')
+						moreInfoA.target = "_blank";
 						if (lastReport.id) {
 							moreInfoA.href = 'https://reports.exodus-privacy.eu.org/reports/' + lastReport.id +'/'
 						} else {
-						moreInfoA.href = 'https://reports.exodus-privacy.eu.org/reports/search/' + id
+							moreInfoA.href = 'https://reports.exodus-privacy.eu.org/reports/search/' + id
 						}	
 						moreInfoA.textContent = 'Get the full report on Exodus Privacy'
 						zDiv.appendChild(moreInfoA)
