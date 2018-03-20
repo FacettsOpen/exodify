@@ -187,11 +187,11 @@ function fetchNbTrackersFor(appID, el,callback,err) {
         callback(appID,el,-1)
       }
     } catch(e) {
-
+      if (err) {
+        err()
+      }
     }
-    if (err) {
-      err()
-    }
+   
   }
 
   xmlHttp.addEventListener("load", reqListener);
@@ -261,11 +261,11 @@ function exodify() {
 
   if(appID) {
 
-  /*
-  * Check here if the app card is already exodified
-  * Notes: depending on whever the playstore is minified or not the page structure changes
-  * sometimes previous div of the app is hidden (cache? for back)
-  */
+    /*
+    * Check here if the app card is already exodified
+    * Notes: depending on whever the playstore is minified or not the page structure changes
+    * sometimes previous div of the app is hidden (cache? for back)
+    */
     var mainBox = mainAppBoxElem()
     if(mainBox && getMainExodifyBoxForAppID(appID,mainBox.parentNode)) {
       //ignore
@@ -273,87 +273,56 @@ function exodify() {
     }
 
 
-
-  var xmlHttp = new XMLHttpRequest();
-  xmlHttp.open( "GET", 'https://reports.exodus-privacy.eu.org/api/search/'+appID, false ); // false for synchronous request
-  xmlHttp.send( null );
-
-  // console.log("Response is : " + xmlHttp.responseText)
-  try
-  {
-    var json = JSON.parse(xmlHttp.responseText);
-    if (json[appID] && json[appID]['reports']) {
-      const nbReports = json[appID]['reports'].length;
-      const lastReport = json[appID]['reports'][nbReports - 1];
-      const nbTrackers = lastReport.trackers.length
-          // console.log("Found " + nbTrackers + " Trackers");
-
-      browser.runtime.sendMessage({appId: appID, nbTrackers: nbTrackers, type : 't1'})
-
-      const existing = getMainExodifyBoxForAppID(appID)//document.getElementById('exodify')
+    fetchNbTrackersFor(appID, undefined,function(id,el,nb) {
+      const existing = getMainExodifyBoxForAppID(id)//document.getElementById('exodify')
       if(existing) {
         existing.parentElement.removeChild(existing);
       }
-      var counterDiv = createInfoElement(nbTrackers,appID)
-      // var counterDiv = document.createElement('div');
-      // counterDiv.id = 'exodify'
-      // counterDiv.innerHTML = "<b>" + nbTrackers + " Trackers</b> <i>- powered by <a href='"+ 'https://reports.exodus-privacy.eu.org/reports/search/' + appID  +"'>Exodus Privacy</a></i>"
-      if (nbTrackers == 0) {
-        counterDiv.className = 'exodify-trackerInfoBoxClean';
-      } else if (nbTrackers < 3) {
-        counterDiv.className = 'exodify-trackerInfoBoxMid';
+      browser.runtime.sendMessage({appId: id, nbTrackers: nb, type : 't1'})
+      if (nb == -1) {
+      //no reports
+        var counterDiv = createMissingElement(appID)
+        counterDiv.className = 'exodify-trackerInfoBoxClean missing';
+        injectHtmlInAppContainer(counterDiv)
       } else {
-        counterDiv.className = 'exodify-trackerInfoBox'
-      }
-      injectHtmlInAppContainer(counterDiv)
-    } else {
-      // no reports
-      browser.runtime.sendMessage({appId: appID, nbTrackers: -1, type : 't1'})
-      const existing = getMainExodifyBoxForAppID(appID)//document.getElementById('exodify')
-      if(existing) {
-       existing.parentElement.removeChild(existing);
-      }
-      var counterDiv = createMissingElement(appID)
-      counterDiv.className = 'exodify-trackerInfoBoxClean missing';
-      injectHtmlInAppContainer(counterDiv)
-    }
-
-    var alternatives = findAlternativeEl()
-    for (var i = 0; i < alternatives.length; i++) {
-      
-      fetchNbTrackersFor(alternatives[i].id,alternatives[i].el, function(id,el,nb) {
-        //console.log(id + ':' + nb);
-        const existing = document.getElementById('exodify-'+id)
-        if(existing) {
-          existing.parentElement.removeChild(existing);
-        }
-        var counterDiv = createQuickInfoElement(nb,id)
-        if (nb == -1) {
-          counterDiv.className = 'exodify-quickbox mid';
-        }
-        else if (nb == 0) {
-          counterDiv.className = 'exodify-quickbox clean';
+        var counterDiv = createInfoElement(nb,id)
+        if (nb == 0) {
+          counterDiv.className = 'exodify-trackerInfoBoxClean';
         } else if (nb < 3) {
-          counterDiv.className = 'exodify-quickbox mid';
+          counterDiv.className = 'exodify-trackerInfoBoxMid';
         } else {
-          counterDiv.className = 'exodify-quickbox'
+         counterDiv.className = 'exodify-trackerInfoBox'
         }
-        var rEL = el.querySelectorAll('.cover')[0] || el
-        rEL.appendChild(counterDiv)
-        // if(el.querySelectorAll('.cover-image-container')[0]) {
-        //   var rEL = el.querySelectorAll('.cover-image-container')[0]
-        //   rEL.parentNode.insertAfter(counterDiv, rEL); 
-        // } else {
-        //   el.appendChild(counterDiv)
-        // }
-       
-      })
-      
-    }
-  } catch(e) {
-         //Oups
+        injectHtmlInAppContainer(counterDiv)
+      }
+
+      var alternatives = findAlternativeEl()
+      for (var i = 0; i < alternatives.length; i++) {
+        
+        fetchNbTrackersFor(alternatives[i].id,alternatives[i].el, function(id,el,nb) {
+          //console.log(id + ':' + nb);
+          const existing = document.getElementById('exodify-'+id)
+          if(existing) {
+            existing.parentElement.removeChild(existing);
+          }
+          var counterDiv = createQuickInfoElement(nb,id)
+          if (nb == -1) {
+            counterDiv.className = 'exodify-quickbox mid';
+          } else if (nb == 0) {
+            counterDiv.className = 'exodify-quickbox clean';
+          } else if (nb < 3) {
+            counterDiv.className = 'exodify-quickbox mid';
+          } else {
+            counterDiv.className = 'exodify-quickbox'
+          }
+          var rEL = el.querySelectorAll('.cover')[0] || el
+          rEL.appendChild(counterDiv)
+         
+        })
+      }
+    })
+     
   }
- }
 }
 
 exodify()
