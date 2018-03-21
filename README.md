@@ -1,6 +1,6 @@
 # Exodify [![Mentioned in Awesome Humane Tech](https://awesome.re/mentioned-badge.svg)](https://github.com/engagingspaces/awesome-humane-tech) [![Humane Tech](https://raw.githubusercontent.com/engagingspaces/awesome-humane-tech/master/humane-tech-badge.svg?sanitize=true)](https://humanetech.com)
 
-Exodify is a browser extension that will show you how many trackers there are in android applications you are looking at in the playstore.
+[Exodify](https://exodify.org)  is a browser extension that will show you how many trackers there are in android applications you are looking at in the playstore.
 
 **Firefox** &ndash; [Install](https://addons.mozilla.org/en-US/firefox/addon/exodify/) &nbsp; ![amo-rating](https://img.shields.io/amo/rating/exodify.svg?style=flat-square) &nbsp; ![amo-rating](https://img.shields.io/amo/users/exodify.svg?style=flat-square) 
 
