@@ -30,6 +30,7 @@ function createInfoElement(nbTrackers, appID) {
   poweredBySpan.className = 'exodify-powered'
   poweredBySpan.textContent = 'powered by ExodusPrivacy'
   poweredBySpan.href = 'https://reports.exodus-privacy.eu.org/reports/search/' + appID;
+  poweredBySpan.target = '_blank';
   counterDiv.appendChild(poweredBySpan)
 
   return counterDiv
