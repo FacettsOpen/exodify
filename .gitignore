@@ -1,0 +1,5 @@
+dest/
+.idea/
+config.json
+opera.nex
+node_modules/
