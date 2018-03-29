@@ -12,7 +12,7 @@ function getParameterByName(name) {
 }
 
 
-function createInfoElement(nbTrackers, appID) {
+function createInfoElement(nbTrackers, appID, report) {
   var counterDiv = document.createElement('div');
   //counterDiv.id = 'exodify'
   counterDiv.setAttribute('data-xodify',appID)
@@ -29,16 +29,29 @@ function createInfoElement(nbTrackers, appID) {
   const poweredBySpan = document.createElement('a');
   poweredBySpan.className = 'exodify-powered'
   poweredBySpan.textContent = 'powered by ExodusPrivacy'
-  poweredBySpan.href = 'https://reports.exodus-privacy.eu.org/reports/search/' + appID;
+  if (report && report.id) {
+    poweredBySpan.href = 'https://reports.exodus-privacy.eu.org/reports/' + report.id +'/'
+  } else {
+    poweredBySpan.href = 'https://reports.exodus-privacy.eu.org/reports/search/' + appID;
+  }
+  
   poweredBySpan.target = '_blank';
   counterDiv.appendChild(poweredBySpan)
 
   return counterDiv
 }
 
-function createQuickInfoElement(nbTrackers, appID) {
+function createQuickInfoElement(nbTrackers, appID,reportID) {
   var counterDiv = document.createElement('div');
   counterDiv.id = 'exodify-'+appID
+
+  var linkWrap =  document.createElement('a');
+  linkWrap.target = '_blank';
+  if (reportID) {
+    linkWrap.href = ('https://reports.exodus-privacy.eu.org/reports/' + reportID +'/')
+  }
+  counterDiv.appendChild(linkWrap)
+
   // counterDiv.className = 'exodify'
 
   const countSpan = document.createElement('p');
@@ -50,8 +63,8 @@ function createQuickInfoElement(nbTrackers, appID) {
   } else {
     countSpan.textContent = nbTrackers + ' Trackers';
   }
-  
-  counterDiv.appendChild(countSpan)
+  linkWrap.appendChild(countSpan)
+  // counterDiv.appendChild(countSpan)
 
   // const poweredBySpan = document.createElement('a');
   // poweredBySpan.className = 'exodify-powered'
@@ -107,31 +120,15 @@ function mainAppBoxElem(appID) {
     }
   }
   //?
-  return document.querySelectorAll("c-wiz[jsdata='deferred-i8']")[0]// document.querySelectorAll('div.cover-container')[0] || document.querySelectorAll('div.oQ6oV')[0] || document.querySelectorAll("c-wiz[jsdata='deferred-i8']")[0]
+  return document.querySelectorAll("c-wiz[jsdata='deferred-i8']")[0]
 }
 
 function injectHtmlInAppContainer(elem) {
   //Depending on the context, the code is minified/obfuscated, so try different euristics
-  var targetElem = mainAppBoxElem()//document.querySelectorAll('div.cover-container')[0] || document.querySelectorAll('div.oQ6oV')[0] || document.querySelectorAll("c-wiz[jsdata='deferred-i8']")[0]
-  // if (elems.length == 0) {
-  //   elems = document.querySelectorAll('div.oQ6oV')
-  // }
-  // for (i in elems) {
-  //   elems[i].parentNode.insertBefore(elem, elems[i]); 
-  //   break;
-  // }
+  var targetElem = mainAppBoxElem()
   if (targetElem) {
     targetElem.parentNode.insertBefore(elem, targetElem); 
   }
-  
-  // var elems = document.getElementsByTagName('div'), i;
-  //  for (i in elems) {
-  //   if((' ' + elems[i].className + ' ').indexOf('cover-container')
-  //     > -1) {
-  //           // console.log("FOUND THAT ITEM");
-  //         elems[i].parentNode.insertBefore(elem, elems[i]); 
-  //           }
-  // }
 }
 
 
@@ -169,57 +166,69 @@ function findAlternativeEl() {
 }
  
 
-/*
-* Fetches from exodus privacy and returns -1 if unknown, or >0 number of trackers.
-*/
-function fetchNbTrackersFor(appID, el,callback,err) {
-  var xmlHttp = new XMLHttpRequest();
+// /*
+// * Fetches from exodus privacy and returns -1 if unknown, or >0 number of trackers.
+// */
+// function fetchNbTrackersFor(appID, el,callback,err) {
+//   var xmlHttp = new XMLHttpRequest();
   
-  function reqListener () {
-    // console.log(this.responseText);
-    try {
-      var json = JSON.parse(xmlHttp.responseText);
-      if (json[appID] && json[appID]['reports']) {
-        const nbReports = json[appID]['reports'].length;
-        const lastReport = json[appID]['reports'][nbReports - 1];
-        const nbTrackers = lastReport.trackers.length
-        callback(appID,el,nbTrackers)
-      } else {
-        callback(appID,el,-1)
-      }
-    } catch(e) {
-      if (err) {
-        err()
-      }
-    }
+//   function reqListener () {
+//     // console.log(this.responseText);
+//     try {
+//       var json = JSON.parse(xmlHttp.responseText);
+//       if (json[appID] && json[appID]['reports']) {
+//         const nbReports = json[appID]['reports'].length;
+//         const lastReport = json[appID]['reports'][nbReports - 1];
+//         const nbTrackers = lastReport.trackers.length
+//         callback(appID,el,nbTrackers)
+//       } else {
+//         callback(appID,el,-1)
+//       }
+//     } catch(e) {
+//       if (err) {
+//         err()
+//       }
+//     }
    
-  }
+//   }
 
-  xmlHttp.addEventListener("load", reqListener);
-  xmlHttp.open( "GET", 'https://reports.exodus-privacy.eu.org/api/search/'+appID );
-  xmlHttp.send( null );
-  //console.log('Response for '+ appID +'is ' + xmlHttp.responseText)
+//   xmlHttp.addEventListener("load", reqListener);
+//   xmlHttp.open( "GET", 'https://reports.exodus-privacy.eu.org/api/search/'+appID );
+//   xmlHttp.send( null );
+//   //console.log('Response for '+ appID +'is ' + xmlHttp.responseText)
   
+// }
+
+function shouldIgnoreXodify() {
+  return window.location.href.indexOf('://play.google.com/apps') == -1 && window.location.href.indexOf('://play.google.com/store/search') == -1 && window.location.href.indexOf('://play.google.com/store/apps') == -1 
 }
 
 function appXodify() {
   if (!window._exodify.shouldAppExodify) {
     return
   }
-  if (window.location.href.indexOf('://play.google.com/apps') == -1 && window.location.href.indexOf('://play.google.com/store/search') == -1 && window.location.href.indexOf('://play.google.com/store/apps') == -1 ) {
+  if (shouldIgnoreXodify()) {
       //ignore
       return
   }
   var alternatives = findAlternativeEl()
+  //browser.runtime.sendMessage({nb: 0, type : 't4'})
   for (var i = 0; i < alternatives.length; i++) {
     const existing = document.getElementById('exodify-'+alternatives[i].id)
     if(existing) {
      continue;
     }
-    fetchNbTrackersFor(alternatives[i].id,alternatives[i].el, function(id,el,nb) {
-      //console.log(id + ':' + nb);
-      
-      var counterDiv = createQuickInfoElement(nb,id)
+    var repSuccess = function(id,name,report,meta) {
+
+      //need to check if still in a correct page..
+      if (window.location.href.indexOf('play.google.com/store/apps/details?id') !=-1) {
+        //ignore
+        return
+      }
+      const nb = report ? report.trackers.length : -1
+      const el = meta.el
+      const reportID = report ? report.id : null
+      var counterDiv = createQuickInfoElement(nb,id, reportID)
       if (nb == -1) {
         counterDiv.className = 'exodify-quickbox mid';
       }
@@ -230,11 +239,16 @@ function appXodify() {
       } else {
         counterDiv.className = 'exodify-quickbox'
       }
+      counterDiv.setAttribute('data-ep-trackers', report ? JSON.stringify(report.trackers): '')
+      counterDiv.setAttribute('data-ep-appid',id)
+      counterDiv.setAttribute('data-ep-name',name)
       var rEL = el.querySelectorAll('.cover')[0]
       //rEL.parentNode.insertAfter(counterDiv, rEL); 
       rEL.appendChild(counterDiv)
-     
-    })
+      browser.runtime.sendMessage({nb: document.querySelectorAll('.exodify-quickbox').length, type : 't4'})
+    }
+    $ep.fetchLatestReportFor(alternatives[i].id,repSuccess,null,{el: alternatives[i].el})
+
   }
 }
 
@@ -273,8 +287,9 @@ function exodify() {
       return
     }
 
-
-    fetchNbTrackersFor(appID, undefined,function(id,el,nb) {
+    $ep.fetchLatestReportFor(appID, function(id,name,report,meta) {
+       const nb = report ? report.trackers.length : -1
+    // fetchNbTrackersFor(appID, undefined,function(id,el,nb) {
       const existing = getMainExodifyBoxForAppID(id)//document.getElementById('exodify')
       if(existing) {
         existing.parentElement.removeChild(existing);
@@ -286,7 +301,7 @@ function exodify() {
         counterDiv.className = 'exodify-trackerInfoBoxClean missing';
         injectHtmlInAppContainer(counterDiv)
       } else {
-        var counterDiv = createInfoElement(nb,id)
+        var counterDiv = createInfoElement(nb,id,report)
         if (nb == 0) {
           counterDiv.className = 'exodify-trackerInfoBoxClean';
         } else if (nb < 3) {
@@ -299,14 +314,15 @@ function exodify() {
 
       var alternatives = findAlternativeEl()
       for (var i = 0; i < alternatives.length; i++) {
-        
-        fetchNbTrackersFor(alternatives[i].id,alternatives[i].el, function(id,el,nb) {
-          //console.log(id + ':' + nb);
+        var repSuccess = function(id,name,report,meta) {
+          const nb = report ? report.trackers.length : -1
+          const el = meta.el
+          const reportID = report ? report.id : null
           const existing = document.getElementById('exodify-'+id)
           if(existing) {
             existing.parentElement.removeChild(existing);
           }
-          var counterDiv = createQuickInfoElement(nb,id)
+          var counterDiv = createQuickInfoElement(nb,id,reportID)
           if (nb == -1) {
             counterDiv.className = 'exodify-quickbox mid';
           } else if (nb == 0) {
@@ -316,10 +332,11 @@ function exodify() {
           } else {
             counterDiv.className = 'exodify-quickbox'
           }
+
           var rEL = el.querySelectorAll('.cover')[0] || el
           rEL.appendChild(counterDiv)
-         
-        })
+        }
+        $ep.fetchLatestReportFor(alternatives[i].id,repSuccess,null,{el: alternatives[i].el})
       }
     })
      
@@ -328,35 +345,72 @@ function exodify() {
 
 exodify()
 appXodify()
+window._exodify.lastQ = window.location.href
 setInterval(function(){ 
   appXodify()
   exodify()
+  if (window._exodify.lastQ != window.location.href) {
+    browser.runtime.sendMessage({nb: 0, type : 't4'})
+    window._exodify.lastQ = window.location.href
+  }
   //check if path has changed
   // if(!document.getElementById('exodify')) {
   //   exodify()
   // }
 }, 3000);
 
-//=================================
-//=================================
-// PREFERENCES MANAGEMENT
-//=================================
-//=================================
+
+browser.runtime.onMessage.addListener(function(message,sender) {
+  //console.log("MMMMMM BACKGROUND" + JSON.stringify(message))
+  //var tabId = sender.tab.id
+
+  if (message.type == "t3" ) {
+    //get all boxes
+    var quickBoxes = document.querySelectorAll('.exodify-quickbox')
+    var metaDatas = []
+    for (var i = 0; i < quickBoxes.length; i++) {
+      var qb = quickBoxes[i];
+      var id = qb.getAttribute('data-ep-appid');
+      var trackers = qb.getAttribute('data-ep-trackers');
+      var name = qb.getAttribute('data-ep-name');
+      metaDatas.push({id : id, trackers: trackers ? JSON.parse(trackers) : null, name: name})
+    }
+    return new Promise(function(resolve) { resolve(metaDatas) })
+  }
+})
+
+/*
+=================================
+=================================
+PREFERENCES MANAGEMENT
+=================================
+=================================
+*/
 
 function onError(error) {
   //console.log(`Error: ${error}`);
 }
 
 function onGot(item) {
-  if (item.extendedExodify) {
-    //TODO why?
+  //this item exists in the base
+  if (typeof(item.extendedExodify) != "undefined") {
+    //Initial?
     if(typeof(item.extendedExodify) === "boolean"){
       // variable is a boolean
       window._exodify.shouldAppExodify = item.extendedExodify
     } else {
-      window._exodify.shouldAppExodify  = item.extendedExodify.newValue || false
+      //change listenr
+      window._exodify.shouldAppExodify  = item.extendedExodify.newValue
+      // if(typeof(item.extendedExodify) == "undefined") {
+      //   window._exodify.shouldAppExodify  = true
+      // } else {
+      //   window._exodify.shouldAppExodify  = item.extendedExodify.newValue
+      // }
+     
     }
-
+  } else {
+    // not in storage, default is trye
+    window._exodify.shouldAppExodify = true
   }
   //TODO clear existing?
 }

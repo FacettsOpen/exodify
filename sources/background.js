@@ -62,7 +62,14 @@ browser.runtime.onMessage.addListener(function(message,sender) {
         // browser.browserAction.setBadgeText({text:''+nb,tabId: tab.id})
     })
       
-  } else {
+  } else if (message.type == "t4" ) {
+    browser.browserAction.setBadgeBackgroundColor({color:'#224955'/*,tabId: tab.id*/})
+    var nb = message.nb
+    if (nb == 0) {
+      browser.browserAction.setBadgeText({text:'',tabId: tabId})
+    } else {
+      browser.browserAction.setBadgeText({text:''+message.nb,tabId: tabId})
+    }
    //browser.browserAction.setBadgeText({text:''})
   }
 

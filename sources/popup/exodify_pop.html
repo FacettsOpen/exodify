@@ -9,7 +9,7 @@
 
 <body>
   <div class='top-banner'>
-      <h1>Exodify <span class="exoVersion">v0.4.6</span></h1>
+      <h1>Exodify <span class="exoVersion">v@@version</span></h1>
 
     </div>
   <div id="popup-content">
@@ -18,11 +18,20 @@
     <div id="currentInfo">
       
     </div>
+
+    <!-- Quick filter box to find occurences of specific trackers in apps displayed  -->
+    <div id="filter" class='hidden'>
+      <input type="text" name="filter" placeholder="type filter (e.g facebook)"><div class="small-loader"></div>
+      <ul id="trackMatch-list">
+      </ul>
+    </div> 
+
     <p class="info">Exodify uses the <a href="https://exodus-privacy.eu.org/" target="_blank">ExodusPrivacy</a> API in order to display directly in the PlayStore page the number of trackers in android applications. This plugin is <a href="https://github.com/FacettsOpen/exodify" target="_blank">open source</a>.</p>
-      <a id="test" href="#">Preferences</a>
-    </ul>
+    <a id="test" href="#">Preferences</a>
+    <!-- </ul> -->
   </div>
  <script src="../browser-polyfill.js"></script>
+ <script src="../ep-api.js"></script>
  <script src="exodify_pop.js"></script>
 
 </body>

@@ -19,7 +19,7 @@ a , a:visited, a:hover, a:active{
 
 .exoVersion {
 	position: absolute;
-	right: 8px;
+	right: 10px;
 	font-weight: normal;
 	font-size: 9px;
 	color: #ADEADC;
@@ -81,6 +81,11 @@ p.info {
 	padding-left: 8px
 }
 
+.topStatInfo {
+	font-weight: bold;
+	color: #9B9B9B;
+	font-size: 1em;
+}
 ul {
 	list-style-type: none;
   margin: 0;
@@ -114,9 +119,78 @@ ul li {
     animation: spin 2s linear infinite;
     margin: 6px auto;
 }
+.small-loader {
+    border: 2px solid #f3f3f3; /* Light grey */
+    border-top: 2px solid #24CBA0; 
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    animation: spin 2s linear infinite;
+    margin: 6px auto;
+}
 
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.statNumber {
+	display: inline-block;
+	width: 28px;
+	height: 28px;
+	background: #224955;
+	border-radius: 50%;
+	color: white;
+	font-weight: normal;
+	line-height: 29px;
+	font-size: 11px;
+	text-align: center;
+}
+p.statLine {
+	margin: 5px 0; 
+}
+.statText {
+	padding-left: 10px;
+	color: #224955;
+}
+
+li a.trackerWebLink {
+	float: right;
+	padding: 0px 10px;
+}
+/* progress */
+
+ul li.p0 {
+	background: linear-gradient(to right, #F2AE43 0%, #f6f6f6 10%);
+}
+ul li.p1 {
+	background: linear-gradient(to right, #F2AE43 10%, #f6f6f6 20%);
+}
+ul li.p2 {
+	background: linear-gradient(to right, #F2AE43 20%, #f6f6f6 30%);
+}
+ul li.p3 {
+	background: linear-gradient(to right, #F2AE43 30%, #f6f6f6 40%);
+}
+ul li.p4 {
+	background: linear-gradient(to right, #F2AE43 40%, #f6f6f6 50%);
+}
+ul li.p5 {
+	background: linear-gradient(to right, #F2AE43 50%, #f6f6f6 60%);
+}
+ul li.p6 {
+	background: linear-gradient(to right, #F2AE43 60%, #f6f6f6 70%);
+}
+ul li.p7 {
+	background: linear-gradient(to right, #F2AE43 70%, #f6f6f6 80%);
+}
+ul li.p8 {
+	background: linear-gradient(to right, #F2AE43 80%, #f6f6f6 90%);
+}
+ul li.p9 {
+	background: linear-gradient(to right, #F2AE43 90%, #f6f6f6 100%);
+}
+ul li.p10 {
+	background: #F2AE43;
 }
 
