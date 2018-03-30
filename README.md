@@ -26,12 +26,41 @@ This extension includes:
 
 ## What it shows
 
-* For now only the number of trackers
+* Displays the number of trackers of an app when you visit the detail page of this app, and will display the number of trackers on alternative apps.
+* When visiting the 'my apps' page or doing a search, the plugin will decorate all applications on screen with trackers info
+* Add direct link to the full report on Exodus Privacy.
+* Use toolbar button to get more info about trackers and some statistics, with individual link for each tracker.
 
 
 ## How to install from sources
 
-Download the 'source/' folder.
+### Automated build
+
+Requirement: [NodeJS](https://nodejs.org) and [Grunt](https://gruntjs.com/getting-started)
+
+Create a config.json file in the base folder (along side gruntfile.js) and add your api token like this:
+
+```json
+{
+	"apiToken" : "Token <GET_A_TOKEN_FROM_EXODUS_PRIVACY>"
+}
+```
+
+Then Run:
+
+```bash
+> npm install
+
+> npm run package
+```
+You will find the packed and unpacked extentions in the `dest/` folder.
+
+
+### Manual Install
+
+Download the `sources/` folder.
+
+Edit the `sources/ep-api.js` and replace the `@@API_TOKEN` with your exodify api token (contact them to get one)
 
 In Firefox type about:addons in the URL and click on the wheel icon and 'Install Add-On From File...' and select the manifest.json file in the source folder.
 
