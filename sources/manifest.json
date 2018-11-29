@@ -37,7 +37,7 @@
       "css" : ["exodify.css"]
     },
     {
-      "matches": ["*://reports.exodus-privacy.eu.org/analysis/submit/*"],
+      "matches": ["*://reports.exodus-privacy.eu.org/*/analysis/submit/*"],
       "js": ["exodify-sub.js"]
     }
   ],
