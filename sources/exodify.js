@@ -162,6 +162,19 @@ function findAlternativeEl() {
     }
     return results
   }
+
+  //Might be the new version obfuscted
+  els = document.querySelectorAll("a.poRVub[href^='/store/apps/details?id=']");
+  if (els.length > 0) {
+    var results = []
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i]
+      var appID = el.getAttribute('href').substring('/store/apps/details?id='.length)
+      results.push({id: appID, el: el.parentNode})  
+    }
+    return results
+  }
+  
   return []
 }
  
@@ -324,6 +337,7 @@ function exodify() {
           }
           var counterDiv = createQuickInfoElement(nb,id,reportID)
           if (nb == -1) {
+            
             counterDiv.className = 'exodify-quickbox mid';
           } else if (nb == 0) {
             counterDiv.className = 'exodify-quickbox clean';
