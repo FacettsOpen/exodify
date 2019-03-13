@@ -174,6 +174,18 @@ function findAlternativeEl() {
     }
     return results
   }
+
+  //wish list
+  els = document.querySelectorAll("a.card-click-target[href^='/store/apps/details?id=']");
+  if (els.length > 0) {
+    var results = []
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i]
+      var appID = el.getAttribute('href').substring('/store/apps/details?id='.length)
+      results.push({id: appID, el: el.parentNode})  
+    }
+    return results
+  }
   
   return []
 }
@@ -214,6 +226,7 @@ function findAlternativeEl() {
 
 function shouldIgnoreXodify() {
   return window.location.href.indexOf('://play.google.com/apps') == -1 && window.location.href.indexOf('://play.google.com/store/search') == -1 && window.location.href.indexOf('://play.google.com/store/apps') == -1 
+   && window.location.href.indexOf('://play.google.com/wishlist') == -1 
 }
 
 function appXodify() {

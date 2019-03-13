@@ -11,7 +11,7 @@ $ep.fetchLatestReportFor = function(appID,success,error,meta) {
       var json = JSON.parse(xmlHttp.responseText);
       if (json[appID] && json[appID]['reports']) {
         const nbReports = json[appID]['reports'].length;
-        const lastReport = json[appID]['reports'][nbReports - 1];
+        const lastReport = getLatestReport(json[appID]['reports'])
         success(appID,json[appID]['name'],lastReport,meta)
       } else {
         success(appID,null,null,meta)
@@ -51,4 +51,9 @@ $ep.fetchTrackerList =  function(success,error) {
 	xmlHttp.open( "GET", 'https://reports.exodus-privacy.eu.org/api/trackers');
   	xmlHttp.setRequestHeader("Authorization", authToken);
 	xmlHttp.send( null );
+}
+
+
+function getLatestReport(reports) {
+  return reports.sort(function(a, b){return b.version_code-a.version_code})[0]
 }
